@@ -199,6 +199,54 @@ AmazonCloudWatchEventRole:
 ```
 When these CloudFormation resources are pieced together, the seond pipeline is triggered when files matching the set object key, are created or updated to the S3 source bucket (this also includes objects created through cross-region replication).
 
+## **Architecture Design - 3 Tier Multi Region** :thought_balloon: ##
+
+### **Considerations before getting started** ###
+
+AWS Regions are built with multiple isolated and physically separate Availability Zones (AZs). This approach allows you to create highly available Well-Architected workloads that span AZs to achieve greater fault tolerance. This satisfies the availability goals for most applications, but there are some general reasons that you may be thinking about expanding beyond a single Region:
+
+1. **Expansion to a global audience** as an application grows and its user base becomes more geographically dispersed, there can be a need to reduce latencies for different parts of the world.
+2. **Reducing** Recovery Point Objectives (RPO) and Recovery Time Objectives (RTO) as part of a multi-Region disaster recovery (DR) plan.
+3. **Local laws and regulations** may have strict data residency and privacy requirements that must be followed.
+
+If you’re building a new multi-Region application, you may want to consider focusing on AWS services that have built-in functionality to assist. Existing applications will need to be further examined to determine the most expandable architecture to support its growth. The following sections review these services, and highlight use cases and best practices.
+
+### **Application Management and Monitoring** ###
+
+1. **Developer tools** - Automation that uses infrastructure as code (IaC) removes manual steps to create and configure infrastructure. It offers a repeatable template that can deploy consistent environments in different Regions.
+
+IaC with AWS CloudFormation StackSets uses a single template to create, update, and delete stacks across multiple accounts and Regions in a single operation. When writing an AWS CloudFormation template, you can change the deployment behavior by pairing parameters with conditional logic. For example, you can set a “standby” parameter that, when “true,” limits the number of Amazon Elastic Compute Cloud (Amazon EC2) instances in an Amazon EC2 Auto Scaling group deployed to a standby Region.
+
+Applications with deployments that span multiple Regions can use cross-Region actions in AWS CodePipeline for a consistent release pipeline. This way you won’t need to set up different actions in each Region. EC2 Image Builder and Amazon Elastic Container Registry (Amazon ECR) have cross-Region copy features to help with consistent AMI and image deployments.
+
+2. **Event-driven architecture** - Decoupled, event-driven applications produce a more extensible and maintainable architecture by having each component perform its specific task independently.
+
+Amazon EventBridge, a serverless event bus, can send events between AWS resources. By utilizing cross-Region event routing, you can share events between workloads in different Regions and accounts. For example, you can share health and utilization events across Regions to determine which Regional workload deployment is best suited for requests.
+
+If your event-driven application relies on pub/sub messaging, Amazon Simple Notification Service (Amazon SNS) can fan out to multiple destinations. When the destination targets are Amazon Simple Queue Service (Amazon SQS) queues or AWS Lambda functions, Amazon SNS can notify recipients in different Regions. For example, you can send messages to a central SQS queue that processes orders for a multi-Region application.
+
+3. **Monitoring and observability** - Observability becomes even more important as the number of resources and deployment locations increases. Being able to quickly identify the impact and root cause of an issue will influence recovery activities, and ensuring your observability stack is resilient to failures will help you make these decisions. When building on AWS, you can pair the health of AWS services with your application metrics to obtain a more complete view of the health of your infrastructure.
+
+To maintain visibility over an application deployed across multiple Regions and accounts, you can create a Trusted Advisor dashboard and an operations dashboard with AWS Systems Manager Explorer. The operations dashboard offers a unified view of resources, such as Amazon EC2, Amazon CloudWatch, and AWS Config data. You can combine the metadata with Amazon Athena to create a multi-Region and multi-account inventory view of resources.
+
+You can view metrics from applications and resources deployed across multiple Regions in the CloudWatch console. This makes it easy to create graphs and dashboards for multi-Region applications. Cross-account functionality is also available in CloudWatch, so you can create a centralized view of dashboards, alarms, and metrics across your organization.
+
+4. **Management: Governance** - Growing an application into a new country means there may be additional data privacy laws and regulations to follow. These will vary depending on the country, and we encourage you to investigate with your legal team to fully understand how this affects your application.
+
+AWS Control Tower supports data compliance by providing guardrails to control and meet data residency requirements. These guardrails are a collection of Service Control Policies (SCPs) and AWS Config rules. You can implement them independently of AWS Control Tower if needed.
+
+5. **Management: Operations** - Several AWS Systems Manager capabilities allow for easier administration of AWS resources, especially as applications grow. Systems Manager Automation simplifies common maintenance and deployment tasks for AWS resources with automated runbooks. These runbooks automate actions on resources across Regions and accounts. You can pair Systems Manager Automation with Systems Manager Patch Manager to ensure instances maintain the latest patches across accounts and Regions.
+
+6. **Bringing it together** - At the end of each part of this blog series, I actually built on a sample application based on the services covered. This shows us how to bring these services together to build a multi-Region application with AWS services. I did not use every service mentioned, just those that fit the use case.
+
+I built this example to expand to a global audience. It requires high availability across Regions, and favors performance over strict consistency. I have chosen the following services covered in this post to accomplish our goals:
+
+- CloudFormation StackSets to deploy everything with IaC. This ensures the infrastructure is deployed consistently across Regions.
+- AWS Config rules provide a centralized place to monitor, record, and evaluate the configuration of our resources.
+- For added observability, we created dashboards with CloudWatch dashboard, Personal Health dashboard, and Trusted Advisor dashboard.
+
+While our primary objective is expanding to a global audience, we note that some of the services such as CloudFormation StackSets rely on Region 1. Each Regional deployment is set up for static stability, but if there were an outage in Region 1 for an extended period of time, our DR playbook would outline how to make CloudFormation changes in Region 2.
+
 <p align="center">
   <img align="center" src="image/static/AWS_Cloud_Architecture-Multi Region.png" width=100%>
 </p>
