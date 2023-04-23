@@ -198,3 +198,8 @@ AmazonCloudWatchEventRole:
       IsMultiRegionTrail: true
 ```
 When these CloudFormation resources are pieced together, the seond pipeline is triggered when files matching the set object key, are created or updated to the S3 source bucket (this also includes objects created through cross-region replication).
+
+<p align="center">
+  <img align="center" src="image/static/AWS_Cloud_Architecture-Multi Region.png" width=100%>
+</p>
+<p align="center"><b>Scenario:</b> The Architecture Design - 3 Tier Multi Region with Cross-Region CI/CD Pipeline.</p>
