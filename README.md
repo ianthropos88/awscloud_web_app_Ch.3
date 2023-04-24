@@ -30,9 +30,9 @@ When a pipeline includes a cross-Region action as part of a stage, CodePipeline 
 
 ## > :rocket: **Thank you for your interest in my work.** :blush: ##
 
-This solution aims at deploying a web application with a PostgreSQL database on AWS in 3 environments (Development, Staging, & Production).
+This solution aims at deploying a pipeline, which will get triggered with set actions (merge/push) on a specified branch, then will pushe the source code to CodeBuild. CodeBuild than zips the source code, copies it to an S3 bucket. With Cross-region replication set, the zipped source code is replicated to the desired region.
 
-The project is supported by several managed services including AWS RDS, PostgreSQL,Amazon ElastiCache, Amazon Elasticsearch Service, Amazon Pinpoint and Amazon Personalize.
+The project is supported by several managed services including Amazon Elastic Compute Cloud (Amazon EC2), Route 53, CloudFront, Secrets Manager, CloudTrail, Security Hub, Amazon ECR, Transit Gateway, and required Cross-Region Replications, etc.
 
 # **Cross-Region Action in CodePipeline** :hourglass_flowing_sand::clock10: #
 
@@ -247,7 +247,20 @@ I built this example to expand to a global audience. It requires high availabili
 
 While our primary objective is expanding to a global audience, we note that some of the services such as CloudFormation StackSets rely on Region 1. Each Regional deployment is set up for static stability, but if there were an outage in Region 1 for an extended period of time, our DR playbook would outline how to make CloudFormation changes in Region 2.
 
+The following architecture illustrates the workflow:
+
 <p align="center">
   <img align="center" src="image/static/AWS_Cloud_Architecture-Multi Region.png" width=100%>
 </p>
-<p align="center"><b>Scenario:</b> The Architecture Design - 3 Tier Multi Region with Cross-Region CI/CD Pipeline.</p>
+<p align="center"><b>Scenario:</b> The Architecture Design - 3 Tier Multi Region with Cross-Region CI/CD Pipeline and Replications.</p>
+
+### **Summary** ###
+
+Many AWS services have features to help you build and manage a multi-Region architecture, but identifying those capabilities across 200+ services can be overwhelming.
+
+It’s important to create a solid foundation when architecting a multi-Region application. These foundations lay the groundwork for you to move fast in a secure, reliable, and elastic way as you build out your application. Many AWS services include native features to help you build a multi-Region architecture. Your architecture will be different depending on the reason for expanding beyond a single Region.
+
+# About Me :sunglasses: #
+- With 10+ years of industry experience, I have thrived in Data Science, Data Governance, IT, Cloud and Product Management. I have a keen interest and expertise in solving business problems using unique logic and analytics. I bring solutions to the table based on competitive Business Acumen and Human Intelligence.
+- Have a look at my portfolio: [Helping organization level all their Seeds Business arguments using Data & Technology | Ex_Zalando | Ex_Freecharge | Ex_Myntra Jabong | Ex_Supercell | Ex_Infosys](https://www.linkedin.com/in/pnchoudhury/)
+- I love talking about #cloudarchitecture, #businessanalytics, #datapipelines, #machinelearning, and #artificialintelligence
