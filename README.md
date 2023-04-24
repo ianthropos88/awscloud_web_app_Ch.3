@@ -1,6 +1,6 @@
 # **Creating a Multi-Region Application with AWS Services. Bespoke AWS Cross-Region CI/CD Pipeline (CloudFormation).** :pushpin: #
 
-AWS CodePipeline includes a number of actions that help you configure build, test, and deploy resources for your automated release process. You can add actions to your pipeline that are in an AWS Region different from your pipeline. When an AWS service is the provider for an action, and this action type/provider type are in a different AWS Region from your pipeline, this is a cross-Region action.
+AWS CodePipeline includes a number of actions that help you configure build, test, and deploy resources for your automated release process. You can add actions to your pipeline that are in an AWS Region different from your pipeline. When an AWS service is the provider for an action, and this action type/provider type are in a different AWS Region from your pipeline, this is a cross-Region action. **[Chapter 3]**
 
 **Note:** Cross-region actions are supported and can only be created in those AWS Regions where CodePipeline is supported. For a list of the supported AWS Regions for CodePipeline, see Quotas in AWS CodePipeline.
 
