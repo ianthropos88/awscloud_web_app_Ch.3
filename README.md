@@ -32,7 +32,7 @@ When a pipeline includes a cross-Region action as part of a stage, CodePipeline 
 
 This solution aims at deploying a pipeline, which will get triggered with set actions (merge/push) on a specified branch, then will pushe the source code to CodeBuild. CodeBuild than zips the source code, copies it to an S3 bucket. With Cross-region replication set, the zipped source code is replicated to the desired region.
 
-The project is supported by several managed services including Amazon Elastic Compute Cloud (Amazon EC2), Route 53, CloudFront, Secrets Manager, CloudTrail, Security Hub, Amazon ECR, Transit Gateway, and required Cross-Region Replications, etc.
+The project is supported by several managed services including **Amazon Elastic Compute Cloud (Amazon EC2)**, **Route 53**, **CloudFront**, **Secrets Manager**, **CloudTrail**, **Security Hub**, **Amazon ECR**, **Transit Gateway**, and required **Cross-Region Replications**, etc.
 
 # **Cross-Region Action in CodePipeline** :hourglass_flowing_sand::clock10: #
 
